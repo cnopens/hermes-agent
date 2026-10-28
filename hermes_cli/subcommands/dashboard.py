@@ -1,7 +1,7 @@
 """``hermes dashboard`` / ``hermes serve`` subcommand parsers.
 
 ``dashboard`` is the browser web UI; ``serve`` is the same gateway, headless —
-what the desktop app and remote backends run. ``serve`` also skips the web UI
+what remote web backends run. ``serve`` also skips the web UI
 build (``headless_backend=True``): pure JSON-RPC/WS clients never load the SPA.
 Both share one handler (``cmd_dashboard`` → ``start_server``).
 """
@@ -94,7 +94,7 @@ def build_dashboard_parser(
     # surfaces that merely share this server.
     serve_parser = subparsers.add_parser(
         "serve",
-        help="Start the Hermes backend server (headless; powers the desktop app and remote backends)",
+        help="Start the Hermes backend server (headless; powers remote web backends)",
         description="Run the Hermes backend server — the JSON-RPC/WebSocket gateway the "
             "desktop app and remote clients connect to. Headless: it never opens "
             "a browser UI.")

@@ -642,7 +642,7 @@ def _uninstall_profile(profile) -> None:
 def run_data_uninstall(args):
     """Erase this home's data, preserving installed runtimes and sibling profiles."""
     from hermes_cli.data_cleanup import plan_data_removal, remove_data
-    from hermes_cli.gui_uninstall import desktop_userdata_dir
+    from hermes_cli.desktop_removed import desktop_userdata_dir
 
     home = get_hermes_home()
     try:
@@ -693,7 +693,7 @@ def run_gui_uninstall(args):
     userData dir — nothing under ``$HERMES_HOME`` config/sessions/.env, and
     never the Python agent or its venv.
     """
-    from hermes_cli.gui_uninstall import (
+    from hermes_cli.desktop_removed import (
         agent_is_installed,
         desktop_install_record,
         gui_install_summary,
@@ -795,7 +795,7 @@ def run_uninstall(args):
     print(f"  Config:  {hermes_home / 'config.yaml'}")
     print(f"  Secrets: {hermes_home / '.env'}")
     print(f"  Data:    {hermes_home / 'cron/'}, {hermes_home / 'sessions/'}, {hermes_home / 'logs/'}")
-    from hermes_cli.gui_uninstall import desktop_userdata_dir
+    from hermes_cli.desktop_removed import desktop_userdata_dir
     if (desktop_userdata := desktop_userdata_dir()).exists():
         print(f"  Desktop: {desktop_userdata}  (app data - kept by 'Keep data', removed by 'Full uninstall')")
     print()
@@ -873,7 +873,7 @@ def _print_uninstall_dry_run(*, project_root: Path, hermes_home: Path, full_unin
     print("  • Hermes wrapper scripts and Hermes-managed node/npm/npx symlinks")
     print("  • Desktop Chat GUI artifacts")
     print(f"  • Code checkout: {project_root}")
-    from hermes_cli.gui_uninstall import desktop_userdata_dir
+    from hermes_cli.desktop_removed import desktop_userdata_dir
     userdata = desktop_userdata_dir()
     if not full_uninstall:
         print(f"  • Keep Hermes config/data: {hermes_home}")
@@ -1048,7 +1048,7 @@ def _perform_uninstall(
     #     state), so keep-data preserves it — only the full wipe removes it.
     log_info("Removing desktop Chat GUI artifacts...")
     try:
-        from hermes_cli.gui_uninstall import uninstall_gui
+        from hermes_cli.desktop_removed import uninstall_gui
         if not uninstall_gui(hermes_home, remove_userdata=full_uninstall):
             log_info("No desktop GUI artifacts found")
     except Exception as e:
@@ -1124,7 +1124,7 @@ def _perform_uninstall(
     if not full_uninstall:
         print(color("Your configuration and data have been preserved:", Colors.CYAN))
         print(f"  {hermes_home}/")
-        from hermes_cli.gui_uninstall import desktop_userdata_dir
+        from hermes_cli.desktop_removed import desktop_userdata_dir
         if (desktop_userdata := desktop_userdata_dir()).exists():
             print(f"  {desktop_userdata}  (desktop app data)")
         _, preserved = _xdg_leftover_paths(full_uninstall=False)

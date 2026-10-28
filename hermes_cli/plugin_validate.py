@@ -24,7 +24,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from hermes_cli.plugin_validate_core_override import check_core_override
-from hermes_cli.plugin_validate_desktop import check_desktop_surface
+try:  # desktop removed in this fork
+    from hermes_cli.plugin_validate_desktop import check_desktop_surface
+except ImportError:  # pragma: no cover
+    def check_desktop_surface(*_a, **_k):
+        return []
 from hermes_cli.plugin_validate_private_imports import check_private_imports
 from hermes_cli.plugin_validate_locales import check_language_packs
 from hermes_cli.plugins_manifest import _CONFIG_SCHEMA_TYPES

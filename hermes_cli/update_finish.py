@@ -132,7 +132,7 @@ def main(context: Path, result: Path) -> int:
                 if desktop is None:
                     # Historical hooks can precede Desktop detection. Resolve
                     # only that unknown state, in the freshly bootstrapped app.
-                    from hermes_cli.main_desktop import _desktop_dist_exists, _desktop_packaged_executable
+                    from hermes_cli.desktop_removed import _desktop_dist_exists, _desktop_packaged_executable
 
                     desktop_dir = root / "apps" / "desktop"
                     desktop = (_desktop_packaged_executable(desktop_dir) is not None

@@ -81,7 +81,7 @@ def prepare_source_dependencies(project_root: Path, workspaces: tuple[str, ...],
 
 def prepare_launch_dependencies(project_root: Path, *, env: dict) -> None:
     """A launch rebuild must not prune another installed source frontend."""
-    from hermes_cli.main_desktop import _desktop_dist_exists, _desktop_packaged_executable
+    from hermes_cli.desktop_removed import _desktop_dist_exists, _desktop_packaged_executable
 
     desktop_dir = project_root / "apps/desktop"
     desktop = _desktop_dist_exists(desktop_dir) or _desktop_packaged_executable(desktop_dir) is not None
@@ -230,33 +230,8 @@ def build_update_products(project_root: Path, *, desktop: bool) -> None:
 
 
 def _build_desktop_product(project_root: Path, env: dict, publish_stage) -> None:
-    from hermes_cli.main_desktop import (
-        _packaged_desktop_current_for_head, _refresh_installed_desktop_apps, build_prepared_desktop)
-
-    desktop_dir = project_root / "apps/desktop"
-    if _packaged_desktop_current_for_head(desktop_dir, project_root):
-        print("  ✓ Desktop app is up to date")
-    else:
-        publish_stage("Building the desktop app")
-        # The desktop build mutates checkout-scoped node_modules and
-        # apps/desktop/release; serialize it against a concurrent manual
-        # `hermes desktop` (#93940). The update path waits rather than exits:
-        # the in-flight build it queues behind produces the same fresh tree
-        # this update needs.
-        from hermes_cli.desktop_build_lock import DesktopBuildLock
-
-        build_lock = DesktopBuildLock(project_root)
-        build_lock.acquire(wait=True)
-        try:
-            build_prepared_desktop(
-                desktop_dir, source_mode=False,
-                npm=shutil.which("npm", path=env["PATH"]), env=env, icons=project_root,
-            )
-        finally:
-            build_lock.release()
-    # A current release/ can still sit beside a stale installed copy (an earlier
-    # update rebuilt but never installed); healing must not wait for the next build.
-    _refresh_installed_desktop_apps(desktop_dir)
+    """desktop removed in this fork — nothing to build, nothing to install."""
+    return
 
 
 if __name__ == "__main__":

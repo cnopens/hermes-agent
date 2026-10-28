@@ -376,7 +376,7 @@ from hermes_cli.subcommands.console import build_console_parser
 from hermes_cli.subcommands.update import build_update_parser
 from hermes_cli.subcommands.uninstall import build_uninstall_parser
 from hermes_cli.subcommands.dashboard import build_dashboard_parser, build_serve_parser
-from hermes_cli.subcommands.gui import build_gui_parser
+# desktop removed in this fork: no `hermes desktop` subcommand
 from hermes_cli.subcommands.logs import build_logs_parser
 from hermes_cli.subcommands.prompt_size import build_prompt_size_parser
 from hermes_cli.subcommands.memory import build_memory_parser
@@ -883,10 +883,8 @@ from hermes_cli.main_install_repair import (  # frozen updater surface: update_c
     _update_marker_path,
     _venv_scripts_dir,
 )
-from hermes_cli.main_desktop import (
+from hermes_cli.desktop_removed import (  # desktop removed; frozen surface kept as no-ops
     cmd_gui,
-)
-from hermes_cli.main_desktop import (  # frozen updater surface: update_cmd*.py resolve these via _m()
     _desktop_build_needed,
     _desktop_dist_exists,
     _desktop_macos_relaunchable_fixup,
@@ -2210,7 +2208,7 @@ def cmd_uninstall(args):
     """
     # Machine-readable snapshot for the desktop uninstall UI; before any TTY gate.
     if getattr(args, "gui_summary", False):
-        from hermes_cli.gui_uninstall import gui_install_summary
+        from hermes_cli.desktop_removed import gui_install_summary
 
         print(json.dumps(gui_install_summary()))
         return
@@ -3414,7 +3412,7 @@ def _build_cli_parser():
     )
     # "desktop" is canonical (Hermes-Setup.exe tells users to run it, so it
     # must be the name --help shows); "gui" is a deprecated alias.
-    build_gui_parser(subparsers, cmd_gui=cmd_gui)
+    # `hermes desktop` / `gui` 已移除（本 fork 不打包 Electron）
     build_logs_parser(subparsers, cmd_logs=cmd_logs)
     build_prompt_size_parser(subparsers, cmd_prompt_size=cmd_prompt_size)
     return parser, subparsers

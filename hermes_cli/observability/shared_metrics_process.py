@@ -90,7 +90,7 @@ def begin_process(kind: str) -> None:
     try:
         from hermes_constants import get_hermes_home
 
-        from .shared_metrics_desktop import ONBOARDING_LATCH_DIRNAME
+        from hermes_cli.desktop_removed import ONBOARDING_LATCH_DIRNAME
         from .shared_metrics_setup import markers_dir as setup_markers_dir
         from .shared_metrics_update import _collection_on
 
