@@ -15,7 +15,23 @@ from __future__ import annotations
 import logging
 import time
 
-from gateway import local_desktop_ui
+try:  # the desktop surface is optional: desktop-less builds ship no local_desktop_ui
+    from gateway import local_desktop_ui
+except ImportError:  # pragma: no cover - desktop removed from this build
+    class _NoDesktopUI:
+        """No-op stand-in for the desktop window bridge; nothing to wire or release."""
+
+        CALLBACK_ATTRS: tuple[str, ...] = ()
+
+        @staticmethod
+        def wire(turn, agent):
+            return None
+
+        @staticmethod
+        def release(token):
+            return None
+
+    local_desktop_ui = _NoDesktopUI()
 
 logger = logging.getLogger(__name__)
 
